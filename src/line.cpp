@@ -240,7 +240,7 @@ void Linelidar::filter_img1(Mat& img1, Mat& img2,Mat& img3)
 	 			                                 8,left.hierarchy,0,Point(0,0));
 		}                        
 	}
-	imshow("imgcontour",imgcontour);
+	imshow("img3",imgcontour);
 	img3 = imgcontour;
 }
 
