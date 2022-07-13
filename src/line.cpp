@@ -218,8 +218,8 @@ void Linelidar::filter_img1(Mat& img1, Mat& img2,Mat& img3)
     ImageContour left = imagecontour(img2);
 	left_img = left.src;
 	mid_img = mid.src;
-	imshow("left",left_img);
-    imshow("mid",mid_img);
+	// imshow("left",left_img);
+    // imshow("mid",mid_img);
     if(mid.contours.size() == 0)
 	{
 		img3 = left_img;
@@ -240,7 +240,7 @@ void Linelidar::filter_img1(Mat& img1, Mat& img2,Mat& img3)
 	 			                                 8,left.hierarchy,0,Point(0,0));
 		}                        
 	}
-	imshow("img3",imgcontour);
+	// imshow("result",imgcontour);
 	img3 = imgcontour;
 }
 
@@ -376,7 +376,7 @@ void Linelidar::StegerLine(Mat& img0 ,vector<Point>& points)
     // waitKey(0);
 }
 
-void Linelidar::grayline(Mat& img,vector<Point>& pts)
+void Linelidar::grayline(Mat& img,Mat& result,vector<Point>& pts)
 {   
 	Mat img1 ,img2;
 	img.copyTo(img1);
@@ -423,7 +423,9 @@ void Linelidar::grayline(Mat& img,vector<Point>& pts)
 		circle(imgcontour, pt, 0.5, Scalar(0, 0, 255));
 	}
     // cout<<"pose"<<pts<<endl;
-	imshow("imgcontour",imgcontour);
+	result = imgcontour;
+	// imshow("imgcontour",imgcontour);
+
 }
 
 void Linelidar::leastsquaresfit(vector<float> &x,vector<float> &y)
@@ -688,4 +690,35 @@ void Linelidar::Interpolation(vector<float> &x,vector<float> &y,float xx)
 	//  float a = 1.25*pow(35.26,2) + 8.76*35.26+ 1.42;
 	//  cout<<"a= "<<a<<endl;
 	 cout<<"插值结果"<<yy<<endl;
+}
+
+float Linelidar::Triangulation(vector<Point> point,vector<float> dis)
+{
+    float f = 75.;
+	float AB = 64.;
+    float theta = 71.53 / 2;
+	for(int i = 0;i<point.size();i++)
+	{
+		float y = point[i].y;
+		float d = AB * f / y;
+		dis.push_back(d);
+	}
+}
+void Linelidar::result_line(vector<Point>& left_ptt,vector<Point>& right_ptt,Mat& src,Size& size)
+{
+    Mat imgcontour = Mat::zeros(size,CV_8UC1);
+	cvtColor(imgcontour, imgcontour, CV_GRAY2BGR);
+	for(int j = 0;j < left_ptt.size();j++)
+	{  
+	    Point pt_l = left_ptt[j];
+        circle(imgcontour, pt_l, 0.5, Scalar(0, 0, 255));
+	}
+    for(int i = 0;i < left_ptt.size();i++)
+	{  
+		Point pt_r = right_ptt[i];
+		circle(imgcontour, pt_r, 0.5, Scalar(0, 0, 255));
+	}
+	imshow("result",imgcontour);
+	src = imgcontour;
+	imgcontour.empty();
 }

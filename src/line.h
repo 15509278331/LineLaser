@@ -50,12 +50,14 @@ public:
     void CalcNormVec(Point2d ptA, Point2d ptB, Point2d ptC, double pfCosSita, double pfSinSita);
     void filter_img1(Mat& img1, Mat& img2,Mat& img3);
     void StegerLine(Mat& img ,vector<Point>& points);
-    void grayline(Mat& img,vector<Point>& pts);
+    void grayline(Mat& img,Mat& result,vector<Point>& pts);
     void GetSample(int& indexe_size,vector<int>& index);
     void fitcicle(vector<Point2f> points,Point2f& circleCenter,float& radius);
     void RanSanCirfit(vector<Point2f> points,Point2f& circleCenter,float& radius);
     void choseline(Mat& src);
     void leastsquaresfit(vector<float> &x,vector<float> &y);
     void Interpolation(vector<float> &x,vector<float> &y,float xx); 
+    float Triangulation(vector<Point> point,vector<float> dis);
+    void result_line(vector<Point>& left_ptt,vector<Point>& right_ptt,Mat& src,Size& size);
 };
 #endif
